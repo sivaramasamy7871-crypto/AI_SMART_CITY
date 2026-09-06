@@ -1,0 +1,15 @@
+# GitHub Linguist Language Override
+# Ensures GitHub marks this repository as Python
+
+PROJECT_ECLIPSE/frontend/** linguist-vendored=true
+PROJECT_ECLIPSE/backend/static/** linguist-vendored=true
+PROJECT_ECLIPSE/backend/static/** linguist-generated=true
+
+*.js linguist-vendored=true
+*.jsx linguist-vendored=true
+*.css linguist-vendored=true
+*.html linguist-vendored=true
+*.json linguist-vendored=true
+
+# Python detection
+*.py linguist-detectable=true
