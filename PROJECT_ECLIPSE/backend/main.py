@@ -22,10 +22,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
+
 # Include Modular Routers
 app.include_router(analytics.router)
 app.include_router(citizens.router)
 app.include_router(save_load.router)
+
+# Mount Static Assets for 3D Smart City frontend
+STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+if os.path.exists(STATIC_DIR):
+    assets_dir = os.path.join(STATIC_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
 class BuildRequest(BaseModel):
     building_type: str
@@ -47,14 +58,15 @@ class SimControlRequest(BaseModel):
 class AdvisorQueryRequest(BaseModel):
     question: str
 
-@app.get("/")
-def root():
-    return {
-        "project": "PROJECT NEXUS",
-        "system": "Autonomous Digital World & Multi-Agent City Simulator",
-        "version": "1.1.0",
-        "status": "online"
-    }
+@app.get("/", response_class=HTMLResponse)
+def root_index():
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse("<h1>PROJECT NEXUS — Smart City Simulation Engine Online</h1><p>Visit <a href='/docs'>/docs</a> for API.</p>")
+
+
 
 @app.get("/api/health")
 def health():

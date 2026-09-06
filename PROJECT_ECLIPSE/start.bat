@@ -1,29 +1,22 @@
 @echo off
-title PROJECT NEXUS - Smart City Launcher
+title PROJECT NEXUS - AI Smart City Launcher
 color 0b
 
 echo ========================================================
-echo         PROJECT NEXUS - SMART CITY AUTO LAUNCHER
+echo     PROJECT NEXUS - AI SMART CITY PYTHON ENGINE
 echo ========================================================
 echo.
-
-echo [1/3] Starting Backend Server (Port 8000)...
-start "NEXUS Backend" "%~dp0start_backend.bat"
-
-echo [2/3] Starting Frontend Server (Port 5173)...
-start "NEXUS Frontend" "%~dp0start_frontend.bat"
-
-echo [3/3] Waiting 4 seconds for servers to initialize...
-timeout /t 4 /nobreak >nul
-
-echo Opening browser at http://localhost:5173 ...
-start http://localhost:5173
-
+echo Launching 100%% Python Smart City Simulator...
 echo.
-echo ========================================================
-echo  All systems active!
-echo  - Frontend: http://localhost:5173
-echo  - Backend:  http://localhost:8000/docs
-echo ========================================================
-echo.
-pause
+
+python "%~dp0run.py"
+
+if errorlevel 1 (
+    echo.
+    echo [!] Python execution encountered an issue.
+    echo [!] Trying virtual environment if available...
+    if exist "%~dp0backend\.venv\Scripts\python.exe" (
+        "%~dp0backend\.venv\Scripts\python.exe" "%~dp0run.py"
+    )
+    pause
+)
